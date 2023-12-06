@@ -171,7 +171,7 @@ A [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deploym
 kubectl apply -f ./deployment.yaml -n team-red
 
 # Verify it's running
-k get pod -n team-red
+kubectl get pod -n team-red
 
 # Output
 NAME                            READY   STATUS    RESTARTS   AGE
