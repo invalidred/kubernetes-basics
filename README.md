@@ -214,7 +214,7 @@ team-red-app-798f464c7f   0         0         0       12h
 team-red-app-676dc9f797   2         2         2       15m
 ```
 
-You can all use [Rollouts](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment) to control deployments for example to rollback a deployment. However this is discouraged from git-ops principles as we want git to be the source of truth. To rollback, the best thing to do would be to update the `deployment.yaml` with previous version of the image and run `kubectl apply -f ./deployment.yaml -n team-red` instead.
+An alternative to viewing replicasets for checking history is using [Rollouts](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment) `kubectl -n team-red rollout history deployment/team-red-app`. And to undo `kubectl -n team-red rollout undo deployment/team-red-app` a deployment. However this is discouraged from git-ops principles as we want git to be the source of truth. To rollback, the best thing to do would be to update the `deployment.yaml` with previous version of the image and run `kubectl apply -f ./deployment.yaml -n team-red` instead.
 
 
 ## Create a Service
