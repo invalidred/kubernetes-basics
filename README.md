@@ -47,7 +47,7 @@ Learn more useful [k3d commands](https://k3d.io/v5.6.0/usage/commands/k3d_cluste
 If you see pods running then you are setup correctly!
 
 ```bash
-kubectl get po -n kube-system
+kubectl get pods -n kube-system
 
 # Output
 NAME                                     READY   STATUS      RESTARTS   AGE
@@ -171,7 +171,7 @@ A [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deploym
 kubectl apply -f ./deployment.yaml -n team-red
 
 # Verify it's running
-kubectl get pod -n team-red
+kubectl get pods -n team-red
 
 # Output
 NAME                            READY   STATUS    RESTARTS   AGE
