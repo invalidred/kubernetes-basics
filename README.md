@@ -58,16 +58,19 @@ svclb-traefik-ad900558-j4ql4             2/2     Running     0          22s
 ```
 
 ### Find all nodes
+![alt text](https://kubernetes.io/images/docs/components-of-kubernetes.svg)
 
 Kubernetes has 2 sorts of nodes.
-- [**control plane**](https://kubernetes.io/docs/concepts/overview/components/) nodes is the brain of k8s orchestration. It's responsible for scheduling your nodes via schedular, manage configuratio state via etcd
+- [**control plane**](https://kubernetes.io/docs/concepts/overview/components/) nodes is the brain of k8s orchestration. It's contains:
   - etcd - high availability database to store configuration
   - API Server - for clients to interact with k8s
   - Scheduler - to ensure pods have a home on a _worker node_
   - Controller Manager - does reconsiliation of all resources to ensure declarative state is respected
   - Cloud controller manager - to talk with Cloud provider
 - [**worker nodes**](https://kubernetes.io/docs/concepts/overview/components/#node-components).
-  - responsible to run your applicaiton code
+  - container runtime - responsible to run your containers (applicaiton code). Defaults to _containerd_ since 1.26
+  - kubelet - agent on node which ensures containers runs in a pod
+  - kube-proxy - helps with networking and `Service` to do it's job
 
 ```bash
 # List all nodes
@@ -176,8 +179,83 @@ team-red-app-798f464c7f-rxzcp   1/1     Running   0          10s
 team-red-app-798f464c7f-4r876   1/1     Running   0          10s
 ```
 
-# Create a Service
+### Updating a deployment
+Update the image version in _deployment.yaml_
+
+- from: `image: mendhak/http-https-echo:29`
+- to: `image: mendhak/http-https-echo:30`
+
+You will need 2 terminals.
+
+_terminal 1_
+
+```bash
+# Watch for pods updating
+kubectl get pods -n team-red --watch
+```
+
+_terminal 2_
+```bash
+kubectl apply -f ./deployment.yaml -n team-red
+```
+
+You will notice a gradual roll-over of old pods with older image version to new pod with newer image version. This is a the default rollout strategy known as _Rolling Update_. Other [strategies](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) are supported.
+
+### Previous version of your deployments via ReplicaSets
+
+To see the previous version deployed, find all corresponding replica sets.
+
+```bash
+kubectl get replicaset -n team-red
+
+# Output
+NAME                      DESIRED   CURRENT   READY   AGE
+team-red-app-798f464c7f   0         0         0       12h
+team-red-app-676dc9f797   2         2         2       15m
+```
+
+You can all use [Rollouts](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment) to control deployments for example to rollback a deployment. However this is discouraged from git-ops principles as we want git to be the source of truth. To rollback, the best thing to do would be to update the `deployment.yaml` with previous version of the image and run `kubectl apply -f ./deployment.yaml -n team-red` instead.
+
+
+## Create a Service
 
 A [Service](https://kubernetes.io/docs/concepts/services-networking/service/) helps expose one or more pods via a singular ip, load balancing request to pods that back it.
 
+```bash
+kubectl apply -f ./service.yaml -n team-red
 
+# verify it's created
+kubectl get services -n team-red
+
+# Output
+NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+team-red-app   ClusterIP   10.43.207.82   <none>        8080/TCP   8s
+```
+
+### `port-forward` - connect to you app Pods via Service
+
+Use [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) command to communicate to your pods.
+
+```
+kubectl port-forward svc/team-red-app 8080:8080 -n team-red
+
+# Output
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+```
+
+In another terminal instance run
+
+```
+curl localhost:8080
+
+# output
+{
+  "path": "/",
+  "headers": {
+    "host": "localhost:8080",
+    "user-agent": "curl/8.1.2",
+    "accept": "*/*"
+  },
+...
+```
