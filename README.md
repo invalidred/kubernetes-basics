@@ -154,7 +154,7 @@ kubectl edit configmap team-red-cm -n team-red
 Make change to `configmap.yaml` by changing `player_initial_lives` from 3 to 4.
 
 ```bash
-kubectl apply -f ./configmap -n team-red
+kubectl apply -f ./configmap.yaml -n team-red
 ```
 
 ### Delete resource using `kubectl delete -f`
