@@ -21,6 +21,9 @@ spec:
         - name: echoserver
           image: mendhak/http-https-echo:29
           imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: team-red-cm
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -28,7 +31,7 @@ spec:
             seccompProfile:
               type: RuntimeDefault
             capabilities:
-              drop: ["ALL"]
+              drop: ['ALL']
           ports:
             - name: http
               containerPort: 8080
