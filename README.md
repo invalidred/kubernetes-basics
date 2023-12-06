@@ -137,7 +137,7 @@ team-red-cm        2      8s
 ### Use `kubectl describe` to view contents of a resource
 
 ```bash
-kubectl describe cm team-red-cm -n team-red
+kubectl describe configmap team-red-cm -n team-red
 ```
 
 ### NEVER use `kubectl edit` to edit contents of a resource
@@ -146,7 +146,7 @@ We loose declarative tracking of resources via `kubectl.kubernetes.io/last-appli
 
 ```bash
 # Avoid doing this, unless it's absolutely necessary
-kubectl edit cm team-red-cm -n team-red
+kubectl edit configmap team-red-cm -n team-red
 ```
 
 ### Update value using `kubectl apply -f` instead
