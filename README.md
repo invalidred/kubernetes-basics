@@ -6,18 +6,13 @@ This tutorial walks you through some basic kubernetes concepts that you can try 
 ## Prerequsites
 
 - Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/).
+- Install kubernetes dependencies
 
 ```bash
-# Install kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
-
-# Install k9s
-# a cli tool to access kubernetes cluster
-brew install derailed/k9s/k9s
-
-# Install k3d
-# k3d creates kubernetes cluster locally
-brew install k3d
+# k9s: a cli tool to access kubernetes cluster
+# k3d: a cli tool to create kubernetes cluster locally
+# kubectl: cli tool to interact with kubernetes cluster
+brew install derailed/k9s/k9s k3d kubectl
 ```
 
 ## Create Kubernetes Cluster locally
