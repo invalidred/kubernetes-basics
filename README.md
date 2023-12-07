@@ -105,7 +105,7 @@ kubectl apply -f ./namespace.yaml
 kubectl get namespace
 
 # Output - notice team-red
-➜  kubernetes-basics git:(main) ✗ k get namespace
+➜  kubernetes-basics git:(main) ✗ kubectl get namespace
 NAME              STATUS   AGE
 kube-system       Active   23m
 default           Active   23m
@@ -121,7 +121,7 @@ A [configmap](https://kubernetes.io/docs/concepts/configuration/configmap/) obje
 kubectl apply -f ./configmap.yaml -n team-red
 
 # Verify it's created
-k get configmap -n team-red
+kubectl get configmap -n team-red
 
 # Output
 NAME               DATA   AGE
