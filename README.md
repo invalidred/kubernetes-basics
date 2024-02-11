@@ -29,7 +29,7 @@ k3d cluster create my-first-cluster --agents 2
 # update kuberconfig to local cluster
 k3d kubeconfig write my-first-cluster
 
-# very cluster is created & connected
+# verify cluster is created & connected
 kubectl cluster-info
 ```
 
